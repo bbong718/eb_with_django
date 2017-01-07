@@ -1,8 +1,9 @@
-import os
+import os, sys
 from subprocess import call
 
 PROJECT_MIN_LEN = 4
 PROJECT_INDENTATION = '.' * 3
+PROJECT_DJANGO_VER = '1.9.2'
 
 my_home = os.getenv('HOME')
 my_cwd = os.getcwd()
@@ -24,7 +25,12 @@ def start_virtualenv(my_activate):
     try:
         call(['source', my_activate])
     except:
-        print "Failed to call->source on %s" % my_activate
+        print "#" * 60
+        print "[!] Failed to call->source on %s" % my_activate
+        print "Run 'source %s' by hand!" % my_activate
+        print "Run 'pip install django==%s'" % PROJECT_DJANGO_VER
+        print "#" * 60
+        raw_input()
 
 
 print "[!] Creating new Python Virtual Environment for Django..."
@@ -37,9 +43,6 @@ print PROJECT_INDENTATION + '[!] Creating environment: %s...' % my_project
 call(['virtualenv', my_project_path])
 
 my_project_activate = my_project_path + '/bin/activate'
-print "Project Activate is: %s" % my_project_activate
-
 start_virtualenv(my_project_activate)
-call(['pip', 'freeze'])
 
 print PROJECT_INDENTATION + "[!] Successfully created new Django virtualenv"
