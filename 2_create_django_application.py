@@ -6,7 +6,7 @@ PROJECT_MIN_LEN = 4
 PROJECT_EB_JANGO = ['django-admin', 'startproject', 'ebdjango']
 PROJECT_START = ['python', 'manage.py', 'runserver']
 PROJECT_REQUIREMENTS = 'pip freeze > requirements.txt'
-PROJECT_EB_JANGO = '.ebextensions'
+PROJECT_EB_EXTENSION = '.ebextensions'
 PROJECT_EB_DJANGO_CONF = 'django.config'
 PROJECT_EB_DJANGO_CONF_DATA = """
 option_settings:
@@ -22,7 +22,7 @@ def create_new_project():
     print "[!] Starting new Elastic Beanstalk Django project..."
     try:
         call(PROJECT_EB_JANGO)
-    except Exception, e:
+    except BaseException as e:
         print PROJECT_INDENTATION + "[!] Failed to create new ebdjango project! %s" % str(e)
         exit()
 
@@ -54,6 +54,7 @@ def create_ebextensions():
     eb_ext_fh.write(PROJECT_EB_DJANGO_CONF_DATA % PROJECT_EB_JANGO[2])
     eb_ext_fh.close()
 
+os.chdir(os.getcwd())
 create_new_project()
 project_requirements()
 create_ebextensions()
