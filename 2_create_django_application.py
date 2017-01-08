@@ -1,6 +1,7 @@
 import os, sys
 from subprocess import call
 
+PROJECT_MIN_LEN = 4
 PROJECT_INDENTATION = '.' * 3
 PROJECT_EB_JANGO = ['django-admin', 'startproject', 'ebdjango']
 PROJECT_START = ['python', 'manage.py', 'runserver']
@@ -62,6 +63,21 @@ def get_python_version():
     py
     return py
 
+def init_eb_project(my_py):
+    my_eb_proj_create = raw_input(PROJECT_INDENTATION + '[?] Do you want to AWS EB project? [y/n]: ')
+    if my_eb_proj_create == 'n':
+        print 'Goodbye!'
+        exit()
+
+    while True:
+        my_eb_proj_name = raw_input(PROJECT_INDENTATION + '[?] What would you like to call your application?: ')
+        if len(my_eb_proj_name) < PROJECT_MIN_LEN:
+            print PROJECT_INDENTATION + '[!] Project should be at least %d characters long!' % PROJECT_MIN_LEN
+        else:
+            break
+
+    call(['eb', 'init', '-p', my_py, my_eb_proj_name])
+
 os.chdir(os.getcwd())
 create_new_project()
 project_requirements()
@@ -72,5 +88,6 @@ run_manage()
 
 # Move up one path so we can get the python version
 os.chdir('..')
-my_py_ = get_python_version()
+my_py = get_python_version()
 
+init_eb_project(my_py)
